@@ -3,440 +3,368 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Обнять?</title>
+<title>С 8 марта, Соня! 🌸</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --tg-bg: #17212b;
-    --tg-secondary: #232e3c;
-    --tg-surface: #1c2733;
-    --tg-blue: #2b8cf5;
-    --tg-blue-dark: #1a7ae0;
-    --tg-text: #f5f5f5;
-    --tg-subtext: #708499;
-    --tg-divider: #2b3a4a;
-    --tg-green: #4dcd5e;
-    --tg-red: #e05252;
-  }
-
-  html, body {
-    height: 100%;
-    background: var(--tg-bg);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    color: var(--tg-text);
-    overflow: hidden;
-  }
-
-  #app {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Background pattern like Telegram */
-  #app::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: 
-      radial-gradient(circle at 20% 20%, rgba(43,140,245,0.08) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(43,140,245,0.06) 0%, transparent 50%);
-    pointer-events: none;
-  }
-
-  .card {
-    background: var(--tg-secondary);
-    border-radius: 20px;
-    padding: 28px 24px 32px;
-    width: calc(100% - 32px);
-    max-width: 380px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
-    animation: cardIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(30px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  .duck-wrap {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    overflow: hidden;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    margin-bottom: 20px;
-  }
-
-  .duck-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    transition: opacity 0.3s;
-  }
-
-  .title {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--tg-text);
-    text-align: center;
-    margin-bottom: 6px;
-    letter-spacing: -0.3px;
-  }
-
-  .subtitle {
-    font-size: 14px;
-    color: var(--tg-subtext);
-    text-align: center;
-    margin-bottom: 28px;
-    line-height: 1.5;
-  }
-
-  .username {
-    color: var(--tg-blue);
-    font-weight: 600;
-  }
-
-  .buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-  }
-
-  .btn {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    transition: transform 0.12s, opacity 0.12s, box-shadow 0.12s;
-    letter-spacing: 0.1px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: white;
-    opacity: 0;
-    transition: opacity 0.15s;
-  }
-
-  .btn:active::after { opacity: 0.1; }
-  .btn:active { transform: scale(0.97); }
-
-  .btn-hug {
-    background: var(--tg-blue);
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(43,140,245,0.4);
-  }
-
-  .btn-hug:hover { background: var(--tg-blue-dark); box-shadow: 0 4px 20px rgba(43,140,245,0.5); }
-
-  .btn-no {
-    background: var(--tg-surface);
-    color: var(--tg-subtext);
-    border: 1px solid var(--tg-divider);
-  }
-
-  .btn-no:hover { background: #243041; color: var(--tg-text); }
-
-  /* ===== HUG STATE ===== */
-  #hug-screen {
-    display: none;
-    height: 100vh;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 10;
-    animation: fadeIn 0.5s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  #hug-screen.visible { display: flex; }
-
-  .hug-card {
-    background: var(--tg-secondary);
-    border-radius: 24px;
-    padding: 32px 24px;
-    width: calc(100% - 32px);
-    max-width: 380px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
-    animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    z-index: 2;
-  }
-
-  @keyframes popIn {
-    from { opacity: 0; transform: scale(0.7); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  .hug-duck {
-    width: 200px;
-    height: 200px;
-    object-fit: contain;
-    margin-bottom: 20px;
-    animation: bounce 1s infinite alternate ease-in-out;
-  }
-
-  @keyframes bounce {
-    from { transform: translateY(0) rotate(-3deg); }
-    to { transform: translateY(-8px) rotate(3deg); }
-  }
-
-  .hug-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--tg-text);
-    text-align: center;
-    margin-bottom: 8px;
-  }
-
-  .hug-sub {
-    font-size: 14px;
-    color: var(--tg-subtext);
-    text-align: center;
-    line-height: 1.5;
-    margin-bottom: 20px;
-  }
-
-  .hug-user {
-    color: var(--tg-blue);
-    font-weight: 700;
-    font-size: 16px;
-  }
-
-  .timer-bar-wrap {
-    width: 100%;
-    background: var(--tg-surface);
-    border-radius: 8px;
-    height: 4px;
-    overflow: hidden;
-    margin-top: 8px;
-  }
-
-  .timer-bar {
-    height: 100%;
-    background: var(--tg-blue);
-    border-radius: 8px;
-    width: 100%;
-    animation: drain 5s linear forwards;
-  }
-
-  @keyframes drain {
-    from { width: 100%; }
-    to { width: 0%; }
-  }
-
-  .timer-text {
-    font-size: 12px;
-    color: var(--tg-subtext);
-    margin-top: 8px;
-    text-align: center;
-  }
-
-  /* ===== CONFETTI ===== */
-  #confetti-canvas {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  /* Telegram-style top bar */
-  .tg-bar {
-    position: fixed;
-    top: 0;
-    left: 0; right: 0;
-    height: 56px;
-    background: var(--tg-secondary);
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    gap: 12px;
-    border-bottom: 1px solid var(--tg-divider);
-    z-index: 100;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-  }
-
-  .tg-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #2b8cf5, #1a7ae0);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-    flex-shrink: 0;
-  }
-
-  .tg-bar-info { flex: 1; }
-  .tg-bar-name { font-size: 15px; font-weight: 600; color: var(--tg-text); }
-  .tg-bar-status { font-size: 12px; color: var(--tg-green); }
-
-  .tg-bar-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: none;
-    border: none;
-    color: var(--tg-blue);
-    font-size: 18px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Pacifico&display=swap');
+:root{--bg:#17212b;--surface:#232e3c;--blue:#5288c1;--blue-l:#64b5ef;--green:#4dcd5c;--text:#fff;--muted:#708fa0;--out:#2b5278;--in:#182533;--pink:#ff6b9d;--pink-l:#ffb3cc;--gold:#ffd700;--purple:#b06ab3}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0}
+#cc{position:fixed;inset:0;pointer-events:none;z-index:999}
+#bye{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .8s ease}
+#bye.show{opacity:1;pointer-events:all}
+.bye-e{font-size:80px;animation:fl 2s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.bye-t{font-family:'Pacifico',cursive;font-size:26px;margin-top:18px;text-align:center;line-height:1.5;background:linear-gradient(135deg,var(--pink),var(--gold),var(--blue-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bye-s{font-size:14px;color:var(--muted);margin-top:10px}
+.header{position:sticky;top:0;z-index:100;background:var(--surface);display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.05);box-shadow:0 2px 16px rgba(0,0,0,.4)}
+.av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;animation:avp 2.5s ease-in-out infinite}
+@keyframes avp{0%,100%{box-shadow:0 0 0 2px var(--pink-l)}50%{box-shadow:0 0 0 5px rgba(255,107,157,.25)}}
+.hi h1{font-size:16px;font-weight:700}
+.hi .on{font-size:12px;color:var(--green);display:flex;align-items:center;gap:4px}
+.od{width:6px;height:6px;border-radius:50%;background:var(--green);animation:bk 1.5s infinite}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.2}}
+.chat{padding:14px 12px 130px;max-width:500px;margin:0 auto;position:relative;z-index:1}
+.divider{text-align:center;margin:12px 0}
+.divider span{background:rgba(255,255,255,.07);padding:4px 14px;border-radius:12px;font-size:12px;color:var(--muted)}
+.brow{display:flex;align-items:flex-end;gap:6px;margin-bottom:4px}
+.brow.out{flex-direction:row-reverse}
+.mav{width:28px;height:28px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;font-size:14px}
+.bubble{max-width:82%;padding:8px 12px;border-radius:16px;font-size:14px;line-height:1.55;position:relative;word-break:break-word;animation:pop .4s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes pop{from{opacity:0;transform:scale(.6) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.bubble.in{background:var(--in);border-bottom-left-radius:4px}
+.bubble.out{background:var(--out);border-bottom-right-radius:4px;margin-left:auto}
+.bt{font-size:11px;color:var(--muted);float:right;margin-left:10px;margin-top:3px}
+.bubble.out .bt{color:rgba(255,255,255,.45)}
+.tr{display:flex;align-items:flex-end;gap:6px;margin-bottom:4px}
+.tb{background:var(--in);padding:10px 14px;border-radius:16px;border-bottom-left-radius:4px;display:inline-flex;gap:4px}
+.td{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:td 1.2s infinite}
+.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+.sticker{font-size:72px;text-align:center;padding:6px;animation:wb 1s ease-in-out}
+@keyframes wb{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+.choices{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0 8px;justify-content:flex-end}
+.cb{background:rgba(82,136,193,.15);border:1.5px solid var(--blue);color:var(--blue-l);border-radius:20px;padding:8px 16px;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;font-weight:500;transition:all .18s;animation:pop .3s cubic-bezier(.34,1.56,.64,1) both}
+.cb:nth-child(2){animation-delay:.08s}.cb:nth-child(3){animation-delay:.16s}
+.cb:active{transform:scale(.92);background:rgba(82,136,193,.3)}
+.gcard{background:var(--surface);border-radius:18px;padding:16px;margin:8px 0;border:1px solid rgba(255,255,255,.07);animation:pop .4s cubic-bezier(.34,1.56,.64,1) both}
+.gt{font-size:15px;font-weight:700;margin-bottom:3px}
+.gs{font-size:12px;color:var(--muted);margin-bottom:12px}
+.fg{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px}
+.fb{aspect-ratio:1;border-radius:12px;border:none;cursor:pointer;font-size:22px;background:rgba(255,255,255,.05);transition:all .2s;display:flex;align-items:center;justify-content:center}
+.fb:active{transform:scale(.88)}
+.fb.matched{background:rgba(77,205,92,.18);border:1.5px solid var(--green)}
+.fb.revealed{animation:flip .3s ease}
+@keyframes flip{0%{transform:rotateY(90deg)}100%{transform:rotateY(0)}}
+.gp{text-align:center;font-size:13px;color:var(--muted)}
+.pb{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:8px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--pink),var(--blue-l));border-radius:2px;transition:width .4s ease}
+.wcs{display:flex;flex-direction:column;gap:8px}
+.wc{background:rgba(255,255,255,.04);border-radius:12px;padding:12px 14px;border:1px solid rgba(255,255,255,.07);cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:10px;position:relative;overflow:hidden}
+.wc:active{transform:scale(.97)}
+.wc.open{background:rgba(82,136,193,.12);border-color:var(--blue)}
+.wi{font-size:24px;flex-shrink:0}
+.wt{font-size:13px;line-height:1.4}
+.wp{font-size:13px;color:var(--muted)}
+.wtap{font-size:11px;color:var(--muted);margin-top:2px}
+.sh{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent);transform:translateX(-100%)}
+.wc:not(.open) .sh{animation:sh 2s infinite}
+@keyframes sh{100%{transform:translateX(100%)}}
+.final{font-family:'Pacifico',cursive;font-size:22px;text-align:center;padding:20px 16px;line-height:1.5;background:linear-gradient(135deg,var(--pink),var(--gold),var(--blue-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.rbar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:10px 0 4px}
+.rb{background:rgba(255,255,255,.07);border-radius:20px;padding:7px 14px;font-size:18px;cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:all .2s;display:flex;align-items:center;gap:5px;font-family:'Inter',sans-serif}
+.rb:active{transform:scale(.88)}
+.rb.active{background:rgba(82,136,193,.2);border-color:var(--blue)}
+.rc{font-size:12px;color:var(--muted)}
+.rb.active .rc{color:var(--blue-l)}
+.rl{text-align:center;font-size:12px;color:var(--muted);padding-bottom:4px;animation:pop .4s ease both}
 </style>
 </head>
 <body>
-
-
-<canvas id="confetti-canvas"></canvas>
-
-<!-- Main screen -->
-<div id="app" style="padding-top: 56px;">
-  <div class="card">
-    <div class="duck-wrap">
-      <img id="main-duck" src="https://i.pinimg.com/originals/95/43/11/954311243767211851bc3c117f2cb492.gif" alt="duck">
-    </div>
-    <div class="title">oluhZXC хочет обнять тебя 🤗</div>
-    <div class="subtitle"></div>
-    <div class="buttons">
-      <button class="btn btn-hug" onclick="doHug()">Обнять</button>
-      <button class="btn btn-no" onclick="doNo()">Не обнимать</button>
-    </div>
+<canvas id="particles"></canvas>
+<canvas id="cc"></canvas>
+<div id="bye">
+  <div class="bye-e">🌸</div>
+  <div class="bye-t">С праздником,<br>Сонечка!</div>
+  <div class="bye-s">До встречи 💕</div>
+</div>
+<div class="header">
+  <div class="av">🌸</div>
+  <div class="hi">
+    <h1>oluhZXC</h1>
+    <div class="on"><div class="od"></div>в сети</div>
   </div>
 </div>
-
-<!-- Hug success screen -->
-<div id="hug-screen">
-  <div class="hug-card">
-    <img class="hug-duck" src="https://i.pinimg.com/originals/12/85/67/12856764f67e51be15194a1294952e66.gif" alt="hugging ducks">
-    <div class="hug-title">🎉 Поздравляю!</div>
-    <div class="hug-sub">Вы обняли пользователя<br><span class="hug-user">oluhZXC</span></div>
-    
-    <div class="timer-text"></div>
-  </div>
+<div class="chat" id="chat">
+  <div class="divider"><span>8 марта 🌷</span></div>
 </div>
-
 <script>
-  function doHug() {
-    document.getElementById('app').style.display = 'none';
-    const hs = document.getElementById('hug-screen');
-    hs.classList.add('visible');
-    startConfetti();
-    setTimeout(() => {
-      try { window.close(); } catch(e) {}
-      // fallback: blank the page
-      document.body.innerHTML = '<div style="height:100vh;display:flex;align-items:center;justify-content:center;background:#17212b;color:#708499;font-family:Inter,sans-serif;font-size:15px;">💙 Объятие доставлено</div>';
-    }, 5000);
-  }
+const chat=document.getElementById('chat');
+let rdone=0,wopen=0;
+function gt(){const n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0')}
+function sl(ms){return new Promise(r=>setTimeout(r,ms))}
+function scr(){setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),60)}
 
-  function doNo() {
-    window.location.href = 'https://www.youtube.com/watch?v=Mvaosumc4hU&list=RDMvaosumc4hU&start_radio=1';
-  }
+function showTyping(){
+  const r=document.createElement('div');r.className='tr';r.id='tr';
+  r.innerHTML='<div class="mav">🌸</div><div class="tb"><div class="td"></div><div class="td"></div><div class="td"></div></div>';
+  chat.appendChild(r);scr();
+}
+function hideTyping(){const t=document.getElementById('tr');if(t)t.remove()}
 
-  // ===== CONFETTI =====
-  function startConfetti() {
-    const canvas = document.getElementById('confetti-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+async function inMsg(html,ms=850){
+  showTyping();await sl(ms);hideTyping();
+  const r=document.createElement('div');r.className='brow in';
+  r.innerHTML=`<div class="mav">🌸</div><div class="bubble in">${html}<span class="bt">${gt()}</span></div>`;
+  chat.appendChild(r);scr();
+}
+function outMsg(html){
+  const r=document.createElement('div');r.className='brow out';
+  r.innerHTML=`<div class="bubble out">${html}<span class="bt">${gt()} ✓✓</span></div>`;
+  chat.appendChild(r);scr();
+}
+async function inSticker(e,ms=600){
+  showTyping();await sl(ms);hideTyping();
+  const r=document.createElement('div');r.className='brow in';
+  r.innerHTML=`<div class="mav">🌸</div><div class="sticker">${e}</div>`;
+  chat.appendChild(r);scr();
+}
+function choice(opts){
+  return new Promise(res=>{
+    const w=document.createElement('div');w.className='choices';
+    opts.forEach(o=>{
+      const b=document.createElement('button');b.className='cb';b.textContent=o.l;
+      b.addEventListener('click',()=>{w.remove();outMsg(o.l);res(o.v||o.l);});
+      w.appendChild(b);
+    });
+    chat.appendChild(w);scr();
+  });
+}
 
-    const colors = ['#2b8cf5','#4dcd5e','#f5c518','#e05252','#a855f7','#f97316','#ec4899','#06b6d4'];
-    const pieces = [];
+// confetti
+const cc=document.getElementById('cc'),cx=cc.getContext('2d');
+cc.width=window.innerWidth;cc.height=window.innerHeight;
+let pieces=[];
+function boom(){
+  for(let i=0;i<100;i++)pieces.push({x:Math.random()*cc.width,y:-10,sx:(Math.random()-.5)*5,sy:Math.random()*4+2,sz:Math.random()*9+4,r:Math.random()*360,rs:(Math.random()-.5)*6,c:['#ff6b9d','#ffd700','#64b5ef','#4dcd5c','#b06ab3','#ff9f43'][Math.floor(Math.random()*6)]});
+  acf();
+}
+function acf(){
+  cx.clearRect(0,0,cc.width,cc.height);
+  pieces=pieces.filter(p=>p.y<cc.height+20);
+  pieces.forEach(p=>{cx.save();cx.translate(p.x,p.y);cx.rotate(p.r*Math.PI/180);cx.fillStyle=p.c;cx.fillRect(-p.sz/2,-p.sz/4,p.sz,p.sz/2);cx.restore();p.x+=p.sx;p.y+=p.sy;p.r+=p.rs;});
+  if(pieces.length)requestAnimationFrame(acf);else cx.clearRect(0,0,cc.width,cc.height);
+}
 
-    for (let i = 0; i < 120; i++) {
-      pieces.push({
-        x: Math.random() * canvas.width,
-        y: -20 - Math.random() * 200,
-        w: 8 + Math.random() * 8,
-        h: 4 + Math.random() * 4,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        vx: (Math.random() - 0.5) * 3,
-        vy: 2 + Math.random() * 4,
-        rot: Math.random() * 360,
-        rotSpeed: (Math.random() - 0.5) * 6,
-        opacity: 0.85 + Math.random() * 0.15,
-        side: Math.random() < 0.5 ? 'left' : 'right'
-      });
-    }
+// petals
+const pc=document.getElementById('particles'),px=pc.getContext('2d');
+pc.width=window.innerWidth;pc.height=window.innerHeight;
+const petals=Array.from({length:12},()=>({x:Math.random()*pc.width,y:Math.random()*pc.height,sz:Math.random()*9+5,sy:Math.random()*.5+.15,sx:(Math.random()-.5)*.3,op:Math.random()*.22+.07,e:['🌸','🌺','🌷','💮'][Math.floor(Math.random()*4)]}));
+function ap(){px.clearRect(0,0,pc.width,pc.height);petals.forEach(p=>{px.save();px.globalAlpha=p.op;px.font=p.sz+'px serif';px.fillText(p.e,p.x,p.y);px.restore();p.y+=p.sy;p.x+=p.sx;if(p.y>pc.height+20){p.y=-20;p.x=Math.random()*pc.width;}});requestAnimationFrame(ap);}
+ap();
 
-    // Bias confetti to sides
-    pieces.forEach(p => {
-      if (p.side === 'left') {
-        p.x = Math.random() * (canvas.width * 0.25);
-        p.vx = 0.5 + Math.random() * 2;
-      } else {
-        p.x = canvas.width * 0.75 + Math.random() * (canvas.width * 0.25);
-        p.vx = -(0.5 + Math.random() * 2);
+// memory game
+function makeGame(){
+  const card=document.createElement('div');card.className='gcard';
+  const fl=['🌸','🌹','🌺','🌷','💐'],sh=[...fl,...fl].sort(()=>Math.random()-.5);
+  let flipped=[],matched=0,canFlip=true;
+  card.innerHTML=`<div class="gt">🎮 Найди пары цветов</div><div class="gs">Переворачивай карточки — найди все 5 пар</div><div class="fg" id="fg"></div><div class="gp">Найдено: <span id="fc">0</span> / 5</div><div class="pb"><div class="pf" id="pf" style="width:0%"></div></div>`;
+  chat.appendChild(card);scr();
+  const g=card.querySelector('#fg');
+  sh.forEach(em=>{
+    const b=document.createElement('button');b.className='fb';b.dataset.e=em;b.textContent='🎁';
+    b.addEventListener('click',()=>{
+      if(!canFlip||b.classList.contains('matched')||b.classList.contains('revealed')||flipped.length>=2)return;
+      b.textContent=em;b.classList.add('revealed');flipped.push(b);
+      if(flipped.length===2){
+        canFlip=false;
+        if(flipped[0].dataset.e===flipped[1].dataset.e){
+          flipped.forEach(x=>x.classList.add('matched'));
+          matched++;card.querySelector('#fc').textContent=matched;
+          card.querySelector('#pf').style.width=(matched/5*100)+'%';
+          flipped=[];canFlip=true;
+          if(matched===5)setTimeout(()=>{boom();afterGame();},500);
+        }else{
+          setTimeout(()=>{flipped.forEach(x=>{x.textContent='🎁';x.classList.remove('revealed');});flipped=[];canFlip=true;},850);
+        }
       }
     });
+    g.appendChild(b);
+  });
+}
 
-    let frame = 0;
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      pieces.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rot += p.rotSpeed;
-        p.vy += 0.04;
-        if (p.y > canvas.height + 20) {
-          p.y = -20;
-          p.x = p.side === 'left'
-            ? Math.random() * canvas.width * 0.25
-            : canvas.width * 0.75 + Math.random() * canvas.width * 0.25;
-        }
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rot * Math.PI / 180);
-        ctx.globalAlpha = p.opacity;
-        ctx.fillStyle = p.color;
-        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
-        ctx.restore();
-      });
-      frame++;
-      if (frame < 360) requestAnimationFrame(draw); // ~6 seconds
-    }
-    draw();
+async function afterGame(){
+  await inMsg('🎉 Все пары найдены! Ты просто звезда! ⭐');
+  await sl(400);
+  await inMsg('Теперь лови свои пожелания — каждое нужно открыть ✨');
+  await sl(300);
+  showWishes();
+}
+
+function showWishes(){
+  const ws=[
+    {i:'💫',t:'Магия',tx:'Пусть каждое твоё желание исполняется само — как по волшебству! 🌟'},
+    {i:'🌺',t:'Красота',tx:'Ты с каждым днём краше, и это не комплимент — это просто факт 💕'},
+    {i:'😄',t:'Радость',tx:'Желаю столько улыбок, что щёки устанут. Но это самая приятная усталость!'},
+    {i:'🌟',t:'Успех',tx:'Пусть всё задуманное получается легко, а цели сами идут навстречу!'},
+    {i:'🫶',t:'Любовь',tx:'Ты окружена теплом и заботой. С праздником, Сонечка! 🌸'},
+  ];
+  const gc=document.createElement('div');gc.className='gcard';
+  gc.innerHTML='<div class="gt">🎀 Твои пожелания</div><div class="gs">Нажми на каждое, чтобы прочитать</div><div class="wcs" id="wl"></div>';
+  chat.appendChild(gc);scr();
+  const list=gc.querySelector('#wl');
+  ws.forEach(w=>{
+    const c=document.createElement('div');c.className='wc';
+    c.innerHTML=`<div class="sh"></div><div class="wi">${w.i}</div><div><div class="wp">${w.t}</div><div class="wtap">👆 Нажми, чтобы открыть</div></div>`;
+    c.addEventListener('click',()=>{
+      if(c.classList.contains('open'))return;
+      c.classList.add('open');c.innerHTML=`<div class="wi">${w.i}</div><div class="wt">${w.tx}</div>`;
+      wopen++;if(wopen===5)setTimeout(()=>{boom();boom();showFinal();},400);
+    });
+    list.appendChild(c);
+  });
+}
+
+async function showFinal(){
+  await sl(600);
+  const f=document.createElement('div');f.className='final';f.innerHTML='С 8 марта,<br>любимая Соня! 🌸';
+  chat.appendChild(f);
+  await sl(500);
+  const l=document.createElement('div');l.className='rl';l.textContent='Поставь все 4 реакции, чтобы завершить 👇';
+  chat.appendChild(l);
+  const bar=document.createElement('div');bar.className='rbar';
+  ['🌹','💕','🥰','✨'].forEach(em=>{
+    const b=document.createElement('div');b.className='rb';
+    b.innerHTML=`${em} <span class="rc">0</span>`;
+    b.addEventListener('click',()=>{
+      if(b.classList.contains('active'))return;
+      b.classList.add('active');b.querySelector('.rc').textContent='1';
+      boom();rdone++;
+      if(rdone===4){
+        setTimeout(()=>{
+          boom();boom();
+          setTimeout(()=>{
+            document.getElementById('bye').classList.add('show');
+            setTimeout(()=>{try{window.close();}catch(e){}},3000);
+          },1200);
+        },300);
+      }
+    });
+    bar.appendChild(b);
+  });
+  chat.appendChild(bar);scr();
+}
+
+// ── MAIN DIALOGUE ──
+async function run(){
+  await sl(500);
+
+  // 1. Приветствие
+  await inMsg('Соня, привет! 👋');
+  await sl(200);
+  const g1=await choice([{l:'Привет! 😊',v:'hi'},{l:'Приветик! 🌸',v:'hihi'},{l:'О, кто это? 👀',v:'who'}]);
+  if(g1==='who'){await inMsg('Это я — твой праздничный сюрприз! 🎉 Скоро всё узнаешь 😏');}
+  else if(g1==='hihi'){await inMsg('Ой, как мило! Приветик-приветик! 🌷 Рада тебя видеть!');}
+  else{await inMsg('Привет-привет! 😊 Так рада, что ты здесь!');}
+
+  await sl(300);
+
+  // 2. Про день
+  await inMsg('Ты знаешь, какой сегодня день? 🤔');
+  await sl(150);
+  const g2=await choice([{l:'8 марта! 🌷',v:'yes'},{l:'Обычный день 🙄',v:'no'},{l:'МОЙ день! 👑',v:'mine'}]);
+  if(g2==='no'){
+    await inMsg('Эй, ну это же твой праздник! 😄');
+    await sl(300);
+    await inMsg('Сегодня 8 марта и весь мир поздравляет тебя! 🌍🌸');
+  }else if(g2==='mine'){
+    await inMsg('ИМЕННО!! 👑 Абсолютно твой день!');
+    await sl(300);
+    await inMsg('Ты сегодня королева, и это официально! 👸✨');
+  }else{
+    await inMsg('Правильно! 🎉 Сегодня твой праздник!');
+    await sl(300);
+    await inMsg('И я подготовила кое-что особенное 😏');
   }
+
+  await sl(300);
+  await inSticker('💐',700);
+  await sl(300);
+
+  // 3. Про настроение
+  await inMsg('Как у тебя сейчас настроение? ☀️');
+  await sl(150);
+  const g3=await choice([{l:'Отличное! 🔥',v:'great'},{l:'Нормальное 😐',v:'ok'},{l:'Только проснулась 😴',v:'sleepy'}]);
+  if(g3==='sleepy'){
+    await inMsg('Хаха! 😄 Ничего, сейчас проснёшься — я для этого и пришла!');
+  }else if(g3==='ok'){
+    await inMsg('Сейчас исправим это! 😏 У меня есть кое-что для тебя!');
+  }else{
+    await inMsg('Огонь! 🔥 Правильный настрой для праздника!');
+  }
+
+  await sl(300);
+
+  // 4. Любишь сюрпризы?
+  await inMsg('Скажи, ты любишь сюрпризы? 🎁');
+  await sl(150);
+  const g4=await choice([{l:'Обожаю!! 😍',v:'love'},{l:'Зависит от сюрприза 😏',v:'depends'},{l:'Лучше без сюрпризов 😅',v:'no'}]);
+  if(g4==='no'){
+    await inMsg('Ха, ну тогда это не сюрприз — это просто поздравление! 😄');
+    await sl(300);
+    await inMsg('Официально: я тебя поздравляю! Вот. Никаких сюрпризов 😇');
+  }else if(g4==='depends'){
+    await inMsg('Хороший ответ 😄 Обещаю — этот сюрприз тебе понравится!');
+  }else{
+    await inMsg('Отлично, потому что я приготовила кое-что интересное! 🥳');
+  }
+
+  await sl(300);
+
+  // 5. Цветок
+  await inMsg('Кстати, какой твой любимый цветок? 🌸');
+  await sl(150);
+  const g5=await choice([{l:'Розы 🌹',v:'rose'},{l:'Ромашки 🌼',v:'daisy'},{l:'Тюльпаны 🌷',v:'tulip'},{l:'Все сразу! 💐',v:'all'}]);
+  if(g5==='rose'){await inMsg('Классика! 🌹 Розы — это вечно. Ты человек с безупречным вкусом!');}
+  else if(g5==='daisy'){await inMsg('Ромашки — это как солнечный день! 🌼 Ты такая же тёплая и светлая!');}
+  else if(g5==='tulip'){await inMsg('Тюльпаны — весна и праздник! 🌷 Прямо как ты сегодня!');}
+  else{await inMsg('Хаха, правильный ответ! 💐 Зачем выбирать — бери всё и сразу!');}
+
+  await sl(400);
+
+  // 6. Ты знаешь что ты классная?
+  await inMsg('Ты знаешь, что ты классная? 🌟');
+  await sl(150);
+  const g6=await choice([{l:'Ну, слышала 😄',v:'heard'},{l:'Конечно знаю! 😎',v:'know'},{l:'Да ладно… 🙈',v:'shy'}]);
+  if(g6==='shy'){
+    await inMsg('Нет-нет-нет! Это правда! 💯');
+    await sl(300);
+    await inMsg('Ты умная, красивая и весёлая — принимай комплименты! 🌸');
+  }else if(g6==='know'){
+    await inMsg('ВОТ ЭТО правильная уверенность! 😄 Именно такой и надо быть!');
+  }else{
+    await inMsg('Ну вот, наконец-то! 😄 Запомни это навсегда!');
+  }
+
+  await sl(400);
+
+  // 7. Игра
+  await inMsg('Окей, у меня для тебя есть игра и 5 пожеланий 🎁');
+  await sl(300);
+  await inMsg('Сначала — игра! Найди все пары цветов 🌸 и пожелания твои 😊');
+  await sl(200);
+  const g7=await choice([{l:'Поехали! 🚀',v:'go'},{l:'Я готова! 💪',v:'ready'},{l:'Принять вызов! ⚡',v:'challenge'}]);
+  if(g7==='challenge'){await inMsg('Ооо, мне нравится этот настрой! ⚡ Показывай на что способна!');}
+  else if(g7==='ready'){await inMsg('Отлично! 💪 Удачи, ты справишься!');}
+  else{await inMsg('Лееетим! 🚀 Найди все пары, я верю в тебя!');}
+
+  await sl(300);
+  makeGame();
+}
+
+run();
+window.addEventListener('resize',()=>{pc.width=cc.width=window.innerWidth;pc.height=cc.height=window.innerHeight;});
 </script>
 </body>
 </html>
